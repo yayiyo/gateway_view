@@ -6,18 +6,21 @@
         placeholder="服务名称/服务描述"
         style="width: 200px;"
         class="filter-item"
-        @keyup.enter.native="handleFilter"/>
+        @keyup.enter.native="handleFilter"
+      />
       <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
         搜索
       </el-button>
-      <el-button
-        class="filter-item"
-        style="margin-left: 10px;"
-        type="primary"
-        icon="el-icon-edit"
-        @click="handleCreate">
-        添加
-      </el-button>
+      <router-link to="/services/create_http">
+        <el-button
+          class="filter-item"
+          style="margin-left: 10px;"
+          type="primary"
+          icon="el-icon-edit"
+          @click="handleCreate">
+          添加
+        </el-button>
+      </router-link>
     </div>
 
     <el-table
@@ -34,14 +37,16 @@
           <span>{{ row.id }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="服务名称" min-width="80px">
+      <el-table-column label="服务名称" align="center" min-width="80px">
         <template slot-scope="{row}">
-          <span>{{ row.service_name }}</span>
+          <div class="text-left">{{ row.service_name }}</div>
         </template>
       </el-table-column>
       <el-table-column label="服务描述" align="center" min-width="120px">
         <template slot-scope="{row}">
-          <div style="text-align: left">{{ row.service_desc }}</div>
+          <div class="text-left">
+            {{ row.service_desc }}
+          </div>
         </template>
       </el-table-column>
       <el-table-column label="类型" align="center" min-width="50px">
@@ -49,9 +54,9 @@
           <span>{{ row.load_type| loadTypeFilter }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="服务地址" min-width="160px">
+      <el-table-column label="服务地址" align="center" min-width="160px">
         <template slot-scope="{row}">
-          <span>{{ row.service_addr }}</span>
+          <div class="text-left">{{ row.service_addr }}</div>
         </template>
       </el-table-column>
       <el-table-column label="QPS" align="center" min-width="50px">
@@ -74,9 +79,11 @@
           <el-button type="primary" size="mini">
             统计
           </el-button>
-          <el-button type="primary" size="mini">
-            修改
-          </el-button>
+          <router-link :to="'/services/edit_http/' + row.id">
+            <el-button type="primary" size="mini">
+              修改
+            </el-button>
+          </router-link>
           <el-button size="mini" type="danger" @click="handleDelete(row,$index)">
             删除
           </el-button>
@@ -84,13 +91,17 @@
       </el-table-column>
     </el-table>
 
-    <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit"
-                @pagination="getList"/>
+    <pagination
+      v-show="total>0"
+      :total="total"
+      :page.sync="listQuery.page"
+      :limit.sync="listQuery.limit"
+      @pagination="getList"/>
   </div>
 </template>
 
 <script>
-import { serviceList } from '@/api/service'
+import { serviceDelete, serviceList } from '@/api/service'
 import waves from '@/directive/waves' // waves directive
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
 
@@ -152,13 +163,29 @@ export default {
       this.getList()
     },
     handleDelete(row, index) {
-      this.$notify({
-        title: 'Success',
-        message: '删除成功',
-        type: 'success',
-        duration: 2000
+      this.$confirm('此操作将永久删除该记录, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        serviceDelete(row.id).then(response => {
+          this.list = response.data.list
+          this.total = response.data.total
+          this.$notify({
+            message: '删除成功！',
+            type: 'success',
+            duration: 2000
+          })
+          this.getList()
+        })
+      }).catch(() => {
+        this.$notify({
+          message: '删除已取消',
+          type: 'info',
+          duration: 2000
+        })
+        this.getList()
       })
-      this.list.splice(index, 1)
     }
   }
 }
