@@ -96,10 +96,45 @@ export const constantRoutes = [
         hidden: true
       },
       {
-        path: 'edit_http',
+        path: 'edit_http/:id(\\d+)',
         component: () => import('@/views/service/http'),
         name: '修改HTTP服务',
         meta: { title: '修改HTTP服务', icon: 'component', affix: false },
+        hidden: true
+      },
+      {
+        path: ':id(\\d+)/stats',
+        component: () => import('@/views/service/stats'),
+        name: '服务统计',
+        meta: { title: '服务统计', icon: 'component', affix: false },
+        hidden: true
+      },
+      {
+        path: 'create_tcp',
+        component: () => import('@/views/service/tcp'),
+        name: '创建TCP服务',
+        meta: { title: '创建TCP服务', icon: 'component', affix: false },
+        hidden: true
+      },
+      {
+        path: 'edit_tcp/:id(\\d+)',
+        component: () => import('@/views/service/tcp'),
+        name: '修改TCP服务',
+        meta: { title: '修改TCP服务', icon: 'component', affix: false },
+        hidden: true
+      },
+      {
+        path: 'create_grpc',
+        component: () => import('@/views/service/grpc'),
+        name: '创建GRPC服务',
+        meta: { title: '创建GRPC服务', icon: 'component', affix: false },
+        hidden: true
+      },
+      {
+        path: 'edit_grpc/:id(\\d+)',
+        component: () => import('@/views/service/grpc'),
+        name: '修改GRPC服务',
+        meta: { title: '修改GRPC服务', icon: 'component', affix: false },
         hidden: true
       }
     ]

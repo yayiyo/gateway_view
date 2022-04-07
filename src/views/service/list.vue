@@ -17,8 +17,28 @@
           style="margin-left: 10px;"
           type="primary"
           icon="el-icon-edit"
-          @click="handleCreate">
-          添加
+        >
+          添加HTTP服务
+        </el-button>
+      </router-link>
+      <router-link to="/services/create_tcp">
+        <el-button
+          class="filter-item"
+          style="margin-left: 10px;"
+          type="primary"
+          icon="el-icon-edit"
+        >
+          添加TCP服务
+        </el-button>
+      </router-link>
+      <router-link to="/services/create_grpc">
+        <el-button
+          class="filter-item"
+          style="margin-left: 10px;"
+          type="primary"
+          icon="el-icon-edit"
+        >
+          添加GRPC服务
         </el-button>
       </router-link>
     </div>
@@ -76,10 +96,22 @@
       </el-table-column>
       <el-table-column label="操作" align="center" width="230" class-name="small-padding fixed-width">
         <template slot-scope="{row,$index}">
-          <el-button type="primary" size="mini">
-            统计
-          </el-button>
-          <router-link :to="'/services/edit_http/' + row.id">
+          <router-link :to="'/services/' + row.id + '/stats'">
+            <el-button type="primary" size="mini">
+              统计
+            </el-button>
+          </router-link>
+          <router-link v-if="row.load_type===0" :to="'/services/edit_http/' + row.id">
+            <el-button type="primary" size="mini">
+              修改
+            </el-button>
+          </router-link>
+          <router-link v-if="row.load_type===1" :to="'/services/edit_tcp/' + row.id">
+            <el-button type="primary" size="mini">
+              修改
+            </el-button>
+          </router-link>
+          <router-link v-if="row.load_type===2" :to="'/services/edit_grpc/' + row.id">
             <el-button type="primary" size="mini">
               修改
             </el-button>
@@ -96,7 +128,8 @@
       :total="total"
       :page.sync="listQuery.page"
       :limit.sync="listQuery.limit"
-      @pagination="getList"/>
+      @pagination="getList"
+    />
   </div>
 </template>
 
