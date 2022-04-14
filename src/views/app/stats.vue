@@ -6,10 +6,10 @@
 
 <script>
 import Chart from './components/LineStats'
-import { serviceDetail, serviceStats } from '@/api/service'
+import { appDetail, appStats } from '@/api/app'
 
 export default {
-  name: 'ServiceStats',
+  name: 'AppsStats',
   components: { Chart },
   data() {
     return {
@@ -22,19 +22,21 @@ export default {
   },
   created() {
     const id = this.$route.params && this.$route.params.id
-    this.fetchStat(id)
+    this.fetchStats(id)
   },
   methods: {
-    fetchStat(id) {
-      serviceStats(id).then(response => {
-        serviceDetail(id).then(resp => {
+    fetchStats(id) {
+      appStats(id).then(response => {
+        appDetail(id).then(resp => {
           this.chartData = {
-            'title': resp.data.info.service_name + '流量统计',
+            'title': resp.data.name + '流量统计',
             'today': response.data.today,
             'yesterday': response.data.yesterday
           }
+          console.log(this.chartData)
         })
       }).catch(() => {
+
       })
     }
   }
@@ -48,4 +50,3 @@ export default {
   height: calc(100vh - 84px);
 }
 </style>
-

@@ -105,8 +105,8 @@ export const constantRoutes = [
       {
         path: ':id(\\d+)/stats',
         component: () => import('@/views/service/stats'),
-        name: '服务统计',
-        meta: { title: '服务统计', icon: 'component', affix: false },
+        name: '服务流量统计',
+        meta: { title: '服务流量统计', icon: 'component', affix: false },
         hidden: true
       },
       {
@@ -135,6 +135,45 @@ export const constantRoutes = [
         component: () => import('@/views/service/grpc'),
         name: '修改GRPC服务',
         meta: { title: '修改GRPC服务', icon: 'component', affix: false },
+        hidden: true
+      }
+    ]
+  },
+  {
+    path: '/apps',
+    component: Layout,
+    redirect: '/apps',
+    name: '租户管理',
+    meta: {
+      title: '租户管理',
+      icon: 'user'
+    },
+    children: [
+      {
+        path: '',
+        component: () => import('@/views/app/list'),
+        name: '租户列表',
+        meta: { title: '租户列表', icon: 'user', affix: false }
+      },
+      {
+        path: 'create',
+        component: () => import('@/views/app/app'),
+        name: '创建租户',
+        meta: { title: '创建租户', icon: 'edit', affix: false },
+        hidden: true
+      },
+      {
+        path: 'edit/:id(\\d+)',
+        component: () => import('@/views/app/app'),
+        name: '修改租户',
+        meta: { title: '修改租户', affix: false },
+        hidden: true
+      },
+      {
+        path: ':id(\\d+)/stats',
+        component: () => import('@/views/app/stats'),
+        name: '租户流量统计',
+        meta: { title: '租户流量统计', noCache: true, affix: false },
         hidden: true
       }
     ]
